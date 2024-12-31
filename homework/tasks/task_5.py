@@ -10,6 +10,11 @@ async def limit_execution_time(coro: Coroutine, max_execution_time: float) -> No
     # время.
     #
     # YOUR CODE GOES HERE
+    try:
+        async with asyncio.timeout(max_execution_time):
+            await coro
+    except asyncio.CancelledError:
+        print("I FAST AS ___ BOY")
 
 
 async def limit_execution_time_many(*coros: Coroutine, max_execution_time: float) -> None:
@@ -17,3 +22,5 @@ async def limit_execution_time_many(*coros: Coroutine, max_execution_time: float
     #
     # YOUR CODE GOES HERE
 
+    coros_res = [limit_execution_time(coro, max_execution_time) for coro in coros]
+    await asyncio.gather(*coros_res)
